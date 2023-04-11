@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Chatroom</title>
+
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" style="height: 80px;weight:80px" src={{ avatar_url[0][0] }} />
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">{{userName}}</span>
+                                </a>
+                            </div>
+                            <div class="logo-element">
+                                CHAT
+                            </div>
+                        </li>
+                        <li class="active">
+                            <a href="/index"><i class="fa fa-address-card"></i> <span class="nav-label">contact person</span></a>
+                        </li>
+                        <li class="active">
+                            <a href="/chatroom"><i class="fa fa-wechat"></i> <span class="nav-label">chatroom</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper" class="gray-bg">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                            <form role="search" class="navbar-form-custom" action="search_results.html">
+                                <div class="form-group">
+                                    <input type="text" placeholder="" class="form-control" name="top-search" id="top-search" />
+                                </div>
+                            </form>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <span class="m-r-sm text-muted welcome-message">Welcome, {{ userName }}</span>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                    <i class="fa fa-sign-out"></i> SignOut
+                                </a>
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+                <div class="row wrapper border-bottom white-bg page-heading">
+                    <div class="col-lg-10">
+                        <h2>CHAT WINDOW</h2>
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-lg-12">
+                                <div class="ibox chat-view">
+                                    <div class="ibox-title">
+                                        <small class="float-right text-muted">Chat Window</small>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-9 ">
+                                                <div class="chat-discussion">
+                                                    {% for row in message %}
+                                                    <div class="chat-message left">
+                                                        <img class="message-avatar" src={{ row[3] }} alt="">
+                                                        <div class="message">
+                                                            <a class="message-author" > {{ row[2] }} </a>
+                                                            <span class="message-date">  {{ row[1]}} </span>
+                                                            <span class="message-content">{{ row[0] }}</span>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="chat-users">
+                                                    <div class="users-list">
+
+                                                    {% for row in users %}
+                                                        <div class="chat-user">
+                                                        {# <span class="float-right label label-primary">Online</span>#}
+                                                            <img class="chat-avatar" src={{ row[1] }} />
+                                                            <div class="chat-user-name">
+                                                                <a href="#">{{row[0]}}</a>
+                                                            </div></div>
+                                                    {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="chat-message-form">
+                                                {#  <a class="fa fa-smile-o fa-2x" style="margin-top: 12px;margin-left: 12px"></a> #}
+                                                    <select style="margin-left: 0;outline: none;border: none" id="Emoji">
+                                                        <option selected="selected" value="0">&#128512;</option>
+                                                        <option value="&#128513;">&#128513;</option>
+                                                        <option value="&#128514;">&#128514;</option>
+                                                        <option value="&#128515;">&#128515;</option>
+                                                        <option value="&#128516;">&#128516;</option>
+                                                        <option value="&#128517;">&#128517;</option>
+                                                        <option value="&#128518;">&#128518;</option>
+                                                        <option value="&#128519;">&#128519;</option>
+                                                        <option value="&#128520;">&#128520;</option>
+                                                        <option value="&#128521;">&#128521;</option>
+                                                        <option value="&#128522;">&#128522;</option>
+                                                        <option value="&#128523;">&#128523;</option>
+                                                        <option value="&#128524;">&#128524;</option>
+                                                        <option value="&#128525;">&#128525;</option>
+                                                        <option value="&#128526;">&#128526;</option>
+                                                        <option value="&#128527;">&#128527;</option>
+                                                        <option value="&#128528;">&#128528;</option>
+                                                        <option value="&#128529;">&#128529;</option>
+                                                        <option value="&#128530;">&#128530;</option>
+                                                        <option value="&#128531;">&#128531;</option>
+                                                        <option value="&#128532;">&#128532;</option>
+                                                        <option value="&#128533;">&#128533;</option>
+                                                        <option value="&#128534;">&#128534;</option>
+                                                        <option value="&#128535;">&#128535;</option>
+                                                        <option value="&#128536;">&#128536;</option>
+                                                        <option value="&#128537;">&#128537;</option>
+                                                        <option value="&#128538;">&#128538;</option>
+                                                        <option value="&#128539;">&#128539;</option>
+                                                        <option value="&#128540;">&#128540;</option>
+                                                        <option value="&#128541;">&#128541;</option>
+                                                        <option value="&#128542;">&#128542;</option>
+                                                        <option value="&#128543;">&#128543;</option>
+                                                        <option value="&#128544;">&#128544;</option>
+                                                        <option value="&#128545;">&#128545;</option>
+                                                        <option value="&#128546;">&#128546;</option>
+                                                        <option value="&#128547;">&#128547;</option>
+                                                        <option value="&#128548;">&#128548;</option>
+                                                        <option value="&#128549;">&#128549;</option>
+                                                    </select>
+                                                    <button href="#" class="fa fa-file-picture-o" style="margin-top: 12px;margin-left: 12px; border: none;color: orange;background: none" onclick="selectFile();"></button>
+                                                    <input type="file" id="file" onchange="getFilePath()"  style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
+                                                    <div class="form-group">
+                                                        <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="Enter chat message ..." value="" >
+                                                        <br>
+                                                        <img src="" class="img" style="height: 100px; weight:100px" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mainly scripts -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+        
+        <!-- Custom and plugin javascript -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/inspinia.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/pace/pace.min.js') }}"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            var  filepath;
+            var log = function() {
+                console.log.apply(console, arguments)
+            }
+
+            var socket;
+
+            var current_channel = ''
+
+            var clear_board = function() {
+                $('.enter').val('');
+                    log('empty')
+                }
+
+                $(document).ready(function() {
+
+                // create instance
+                socket = io.connect('ws://' + document.domain + ':' + location.port + '/chatroom');
+
+                socket.on('connect', function() {
+                    log('connection succeeded');
+                });
+
+                socket.on('message', function(data) {
+                    Username = data.user_name
+                    text = data.text
+                    create_time = data.create_time
+                    var avatar_url = data.avatar_url
+                    log(Username + ':' + text)
+
+                    if(filepath){
+                        $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'> <img src='"+ filepath+"' class='imgchat' style='height: 100px;weight:100px'/>"+text+"</span> </div> </div>");
+                        $(".img").attr("src",'');
+                    }
+
+                    else{
+                        $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'>"+text+"</span> </div> </div>");
+                    }
+                });
+
+                $('.enter').keypress(function(e) {
+                    var code = e.keyCode || e.which;
+                    if (code == 13) {
+                        // Get the chat content of the chat box
+                        var Texttext = $('.enter').val();
+                        
+                        // Clear chat
+                        $('.enter').val('');
+                        
+                        // Send chat content to the backend
+                        socket.emit('text', {'text': Texttext});
+                    }
+                });
+                $('#Emoji').change(function() {
+                
+                $("#Emoji").val();                          // Get the value of the currently selected item.
+                    var options=$("#Emoji option:selected");// Get the current selection.
+                    options.val();                          // Get the value of the currently selected item.
+                    
+                    $('.enter').val($('.enter').val() + options.val());
+                    console.log(options.val());
+                })
+            });
+
+            function selectFile(){
+                // trigger click event for file selection
+                $("#file").trigger("click");
+            }
+
+            // Get the path of the file for testing
+            $("#file").change(function(){
+                $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
+                filepath = URL.createObjectURL($(this)[0].files[0]);
+                console.log(URL.createObjectURL($(this)[0].files[0]))
+            })
+
+        </script>
+    </body>
+
+</html>

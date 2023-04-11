@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Chatroom</title>
+
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/materialdesignicons.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/jquery-confirm.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+        <style>
+            .avas {
+                height: 80px;
+                width: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" id="ft_img" style="height: 80px; weight:80px" src={{ avatar_url }}/>
+                                <div class="s_box" id="sbox">
+                                    <div class="header">
+                                        <p>change avatar</p>
+                                        <span class="close" id="close">x</span>
+                                    </div>
+                                    <hr width="80%" color="#e0e0eb"/>
+                                    <div id="t_img">
+                                        <img src="{{ url_for('static', filename='images/001.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/002.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/003.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/004.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/005.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/006.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/007.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/008.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/009.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/010.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/011.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/012.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/013.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/014.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/015.jpg') }}" class="avas"/>
+                                        <img src="{{ url_for('static', filename='images/016.jpg') }}" class="avas"/>
+                                    </div>
+                                    <hr width="80%" color="#e0e0eb"/>
+                                    <div class="bt_box">
+                                        <a class="gb" href="javascript:" id="hide">closure</a>
+                                        <a class="queren" href="javascript:" id="but">save avatar</a>
+                                    </div>
+                                </div>
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">{{ userName }} </span>
+                                </a>
+                            </div>
+                            <div class="logo-element">
+                                CHAT
+                            </div>
+                        </li>
+
+                        <li class="active">
+                            <a href="/index"><i class="fa fa-address-card"></i> <span class="nav-label">contact person</span></a>
+                        </li>
+                        <li class="active">
+                            <a href="/chatroom"><i class="fa fa-wechat"></i> <span class="nav-label">Chatroom</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper" class="gray-bg">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                            <form role="search" class="navbar-form-custom" action="search_results.html">
+                                <div class="form-group">
+                                    <input type="text" placeholder="contact person..." class="form-control" name="top-search" id="top-search">
+                                </div>
+                            </form>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <span class="m-r-sm text-muted welcome-message">Welcome, {{ userName }}</span>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                <i class="fa fa-sign-out"></i> Logout
+                            </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="row wrapper border-bottom white-bg page-heading">
+                    <div class="col-lg-9">
+                        <h2>Contact</h2>
+                    </div>
+                </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        {% for row in users %}
+                        <div class="col-lg-3">
+                            <div class="contact-box center-version">
+                                <a href="profile.html">
+                                    <img alt="image" class="rounded-circle" src={{ row[1] }}>
+                                    <h3 class="m-b-xs"><strong>{{row[0]}}</strong></h3>
+                                    <address class="m-t-md">
+                                        <strong>Contact information</strong>
+                                        <br>
+                                        Mail {{ row[2] }}
+                                        <br>
+                                    </address>
+                                </a>
+                            {#  <div class="contact-box-footer">  #}
+                                {#  <div class="m-t-xs btn-group">  #}
+                                    {#   <a href=""  class="btn btn-xs btn-white"><i class="fa fa-phone"></i> Call </a>  #}
+                                        {#  <a href=""  class="btn btn-xs btn-white"><i class="fa fa-envelope"></i> Send Message </a>  #}
+                                {#  </div>   #}
+                            {#  </div>  #}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mainly scripts -->
+        <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.metisMenu.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.slimscroll.min.js') }}"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="{{ url_for('static', filename='js/inspinia.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/plugins/pace/pace.min.js') }}"></script>
+        <!--Dialog box-->
+        <script src="{{ url_for('static', filename='js/jquery-confirm.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.min.js') }}"></script>
+
+        <!-- Mainly scripts -->
+        <!-- <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.1/socket.io.js"></script> -->
+    
+        <script type="text/javascript">
+            var newurl;
+            $("#ft_img").click(function(){
+                $("#sbox").show("slow");
+            });
+            $("#hide").click(function(){
+                    $("#sbox").hide("slow");
+            });
+            $("#close").click(function(){
+                    $("#sbox").hide("slow");
+            });
+
+            // The selected image gets the image src value
+            var $t_img = document.getElementById('t_img');
+            var $img = $t_img.getElementsByTagName('img');
+            var index = 0;
+            
+            for(var i = 0; i<$img.length;i++){
+                $img[i].index=i;
+                $img[i].onclick = function(){
+                    $img[index].style.borderRadius="15%";
+                    $img[index].style.border="none"
+                    this.style.borderRadius="50%";
+                    this.style.border="1px solid red"
+                    index = this.index;
+                    var $newsrc = $img[index].src;
+                    newurl = $newsrc;
+                    $(".t_img").attr('src',$newsrc);
+
+                }
+            }
+
+            // Click the Confirm Modify button to change the avatar
+            $("#but").click(function(){
+                $("#sbox").hide("slow");
+                console.log(newurl);
+                socket = io.connect('ws://' + document.domain + ':' + location.port + '/index');
+                socket.on('Iconnect', function() {
+                    console.log('connection succeeded');   
+                });
+                
+                socket.emit('avatar_url', {'avatar_url': newurl});
+            });
+        </script>
+
+    </body>
+</html>
