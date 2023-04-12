@@ -49,14 +49,14 @@ def get_history(user = None):
     mess = []
 
     if user is None:
-        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id \
-                    FROM messages, users where messages.user_id = users.id"
+        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id \
+                    FROM messages, users where messages.user_id = users.name"
     
         messages = query.query_no(sql)
-    
+  
     else:
-        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id \
-                FROM messages, users where (users.name = ? OR messages.receiver_id = ?) AND messages.user_id = users.id"
+        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id \
+                FROM messages, users where (users.name = ? OR messages.receiver_id = ?) AND messages.user_id = users.name"
         
         params = [user, user]
         messages = query.query(sql, params)
@@ -68,7 +68,8 @@ def get_history(user = None):
                 message[1],
                 message[2],
                 message[3],
-                message[4]
+                message[4],
+                message[5]
             ))
 
     return mess
@@ -184,7 +185,23 @@ def profile(user):
         # get history by user
         mess = get_history(user)
 
-        return render_template('profile.html', user = data[0], messages = mess)
+        sql = "SELECT name from users"
+        users = query.query_no(sql)
+
+        charts = {}
+
+        for us in users:
+            if us[0] != user:
+                charts[us[0]] = 0
+
+        for message in mess:
+            if message[2] == user:
+                charts[message[5]] = int(charts[message[5]]) + 1
+            elif message[5] == user:
+
+                charts[message[2]] = int(charts[message[2]]) + 1
+
+        return render_template('profile.html', user = data[0], messages = mess, charts = charts, users = users)
 
 ## connect chat room
 @socketio.on('connect', namespace='/chatroom')
@@ -238,10 +255,10 @@ def text(information):
     if information.get('receiver') is None:
         # Insert chat information into database, update database
         sql = 'INSERT INTO messages (message, user_id, created_at) VALUES (?, ?, ?)'
-        params = [base64.b64encode(text.encode('utf-8')), user_id[0][0], create_time]
+        params = [base64.b64encode(text.encode('utf-8')), user_name, create_time]
     else:
         sql = 'INSERT INTO messages (message, user_id, created_at, receiver_id) VALUES (?, ?, ?, ?)'
-        params = [base64.b64encode(text.encode('utf-8')), user_id[0][0], create_time, information.get('receiver')]
+        params = [base64.b64encode(text.encode('utf-8')), user_name, create_time, information.get('receiver')]
 
     msg = query.update(sql, params)
 
