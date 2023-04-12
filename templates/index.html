@@ -27,7 +27,7 @@
                     <ul class="nav metismenu" id="side-menu">
                         <li class="nav-header">
                             <div class="dropdown profile-element">
-                                <img alt="image" class="rounded-circle" id="ft_img" style="height: 80px; weight:80px" src={{ avatar_url }}/>
+                                <img alt="image" class="rounded-circle" id="ft_img" style="height: 80px; weight:80px" src="{{ avatar_url }}"/>
                                 <div class="s_box" id="sbox">
                                     <div class="header">
                                         <p>change avatar</p>
@@ -54,13 +54,9 @@
                                     </div>
                                     <hr width="80%" color="#e0e0eb"/>
                                     <div class="bt_box">
-                                        <!-- <a class="gb" href="javascript:" id="hide">closure</a> -->
-                                        <a class="queren" href="javascript:" id="but">save avatar</a>
+                                        <a class="queren btn btn-success btn-block" href="javascript:" id="but">save avatar</a>
                                     </div>
                                 </div>
-                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                    <span class="block m-t-xs font-bold">{{ userName }} </span>
-                                </a>
                             </div>
                             <div class="logo-element">
                                 CHAT
@@ -111,8 +107,8 @@
                         {% for row in users %}
                         <div class="col-lg-3">
                             <div class="contact-box center-version">
-                                <a href="profile/{{ row[0] }}">
-                                    <img alt="image" class="rounded-circle" src={{ row[1] }} id="profile_img_{{row[3]}}">
+                                <a href="history/{{ row[0] }}">
+                                    <img alt="image" class="rounded-circle" src="{{ row[1] }}" id="profile_img_{{row[3]}}">
                                     <h3 class="m-b-xs"><strong>{{row[0]}}</strong></h3>
                                     <address class="m-t-md">
                                         <strong>Contact information</strong>

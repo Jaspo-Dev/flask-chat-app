@@ -71,7 +71,7 @@
                                     <small class="float-right text-muted">Chatting</small>
                                 </div>
                                 <div class="ibox-content">
-                                    <div class="chat-discussion">
+                                    <div class="chat-discussion" style="height: 600px;">
                                         {% for row in messages %}
                                         <div class="chat-message left">
                                             <img class="message-avatar" src={{ row[3] }} alt="">
@@ -92,7 +92,7 @@
                                     <small class="float-right text-muted">Chart</small>
                                 </div>
                                 <div class="ibox-content">
-                                    <canvas id="myChart" style="width:100%; max-width:800px"></canvas>
+                                    <canvas id="myChart" style="width:100%; max-width:800px; height: 600px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -148,12 +148,10 @@
                     legend: {display: false},
                     title: {
                         display: true,
-                        text: "Chat Analysis"
+                        // text: "Chat Analysis"
                     }
                 }
             });
-
-            
         </script>
     </body>
 

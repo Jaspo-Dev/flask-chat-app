@@ -171,8 +171,8 @@ def chatroom():
 
         return render_template("chatroom.html", userName = userName, message = mess, users = users, avatar_url = avatar_url, cur = user_list)
 
-## Profile
-@app.route("/profile/<user>")
+## History
+@app.route("/history/<user>")
 def profile(user):
     if 'email' not in session:
         return redirect(url_for('login'))
@@ -201,7 +201,7 @@ def profile(user):
 
                 charts[message[2]] = int(charts[message[2]]) + 1
 
-        return render_template('profile.html', user = data[0], messages = mess, charts = charts, users = users)
+        return render_template('history.html', user = data[0], messages = mess, charts = charts, users = users)
 
 ## connect chat room
 @socketio.on('connect', namespace='/chatroom')
