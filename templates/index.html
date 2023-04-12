@@ -54,7 +54,7 @@
                                     </div>
                                     <hr width="80%" color="#e0e0eb"/>
                                     <div class="bt_box">
-                                        <a class="gb" href="javascript:" id="hide">closure</a>
+                                        <!-- <a class="gb" href="javascript:" id="hide">closure</a> -->
                                         <a class="queren" href="javascript:" id="but">save avatar</a>
                                     </div>
                                 </div>
@@ -111,8 +111,8 @@
                         {% for row in users %}
                         <div class="col-lg-3">
                             <div class="contact-box center-version">
-                                <a href="profile.html">
-                                    <img alt="image" class="rounded-circle" src={{ row[1] }}>
+                                <a href="profile/{{ row[0] }}">
+                                    <img alt="image" class="rounded-circle" src={{ row[1] }} id="profile_img_{{row[3]}}">
                                     <h3 class="m-b-xs"><strong>{{row[0]}}</strong></h3>
                                     <address class="m-t-md">
                                         <strong>Contact information</strong>
@@ -150,19 +150,21 @@
         <script src="{{ url_for('static', filename='js/main.min.js') }}"></script>
 
         <!-- Mainly scripts -->
-        <!-- <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.1/socket.io.js"></script> -->
+        <!-- <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script> -->
+        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
     
         <script type="text/javascript">
             var newurl;
             $("#ft_img").click(function(){
                 $("#sbox").show("slow");
             });
+
             $("#hide").click(function(){
-                    $("#sbox").hide("slow");
+                $("#sbox").hide("slow");
             });
+
             $("#close").click(function(){
-                    $("#sbox").hide("slow");
+                $("#sbox").hide("slow");
             });
 
             // The selected image gets the image src value
@@ -181,7 +183,6 @@
                     var $newsrc = $img[index].src;
                     newurl = $newsrc;
                     $(".t_img").attr('src',$newsrc);
-
                 }
             }
 
@@ -191,11 +192,19 @@
                 console.log(newurl);
                 socket = io.connect('ws://' + document.domain + ':' + location.port + '/index');
                 socket.on('Iconnect', function() {
-                    console.log('connection succeeded');   
+                    console.log('connection succeeded');
                 });
                 
                 socket.emit('avatar_url', {'avatar_url': newurl});
+
+                socket.on("avatar_upload", function(data) {
+                    $("#ft_img").attr("src", data.avatar_url);
+                    $("#profile_img_" + data.user_id).attr("src", data.avatar_url);
+                });
             });
+
+            
+
         </script>
 
     </body>

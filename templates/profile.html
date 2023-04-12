@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Chatroom</title>
+
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" style="height: 80px;weight:80px" src="{{ user[4] }}" />
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">{{user[1]}}</span>
+                                </a>
+                            </div>
+                            <div class="logo-element">
+                                CHAT
+                            </div>
+                        </li>
+                        <li class="active">
+                            <a href="/index"><i class="fa fa-address-card"></i> <span class="nav-label">contact person</span></a>
+                        </li>
+                        <li class="active">
+                            <a href="/chatroom"><i class="fa fa-wechat"></i> <span class="nav-label">chatroom</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper" class="gray-bg">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <span class="m-r-sm text-muted welcome-message">Welcome, {{ user[1] }}</span>
+                            </li>
+                            <li>
+                                <a href="/logout">
+                                    <i class="fa fa-sign-out"></i> SignOut
+                                </a>
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+                <div class="row wrapper border-bottom white-bg page-heading">
+                    <div class="col-lg-10">
+                        <h2>HISTORY</h2>
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="ibox chat-view">
+                                <div class="ibox-title">
+                                    <small class="float-right text-muted">Chatting</small>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="chat-discussion">
+                                        {% for row in messages %}
+                                        <div class="chat-message left">
+                                            <img class="message-avatar" src={{ row[3] }} alt="">
+                                            <div class="message">
+                                                <a class="message-author" > {{ row[2] }} </a>
+                                                <span class="message-date">  {{ row[1]}} </span>
+                                                <span class="message-content">{{ row[0] }}</span>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="ibox chat-view">
+                                <div class="ibox-title">
+                                    <small class="float-right text-muted">Chatting</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mainly scripts -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+        
+        <!-- Custom and plugin javascript -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/inspinia.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/pace/pace.min.js') }}"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            var  filepath;
+            var log = function() {
+                console.log.apply(console, arguments)
+            }
+
+            var socket;
+
+            var current_channel = ''
+
+            var clear_board = function() {
+                $('.enter').val('');
+                    log('empty')
+                }
+
+                $(document).ready(function() {
+                
+                // Append into Chat Window
+                let append_chat = function(data) {
+                    let html = "";
+
+                    html += "<div class='chat-message left'>";
+                    html += "<img class='message-avatar' src='" + data.avatar_url + "' alt=''>";
+                    html += "<div class='message'>";
+                    html += "<a class='message-author'>" + data.user_name + "</a>";
+                    html += "<span class='message-date'>" + data.create_time + "</span>";
+                    html += "<span class='message-content'>" + data.text + "</span>";
+                    html += "</div> </div>";
+
+                    return html;
+                }
+
+                // create instance
+                socket = io.connect('ws://' + document.domain + ':' + location.port + '/chatroom');
+
+                socket.on('connect', function() {
+                    log('connection succeeded into chatroom');
+
+                    socket.emit('joined', {'text': 'joined'})
+                });
+
+                socket.on('message', function(data) {
+                    Username = data.user_name
+                    text = data.text
+                    create_time = data.create_time
+                    var avatar_url = data.avatar_url
+
+                    if(filepath){
+                        $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'> <img src='"+ filepath+"' class='imgchat' style='height: 100px;weight:100px'/>"+text+"</span> </div> </div>");
+                        $(".img").attr("src",'');
+                    }
+
+                    else{
+                        let html = append_chat(data);
+
+                        $(".chat-discussion").append(html);
+                    }
+                });
+
+                socket.on('status', function(data) {
+                    let html = append_chat(data);
+
+                    $(".chat-discussion").append(html);
+                });
+
+                $('.enter').keypress(function(e) {
+                    var code = e.keyCode || e.which;
+                    if (code == 13) {
+                        // Get the chat content of the chat box
+                        var Texttext = $('.enter').val();
+                        
+                        // Clear chat
+                        $('.enter').val('');
+                        
+                        // Send chat content to the backend
+                        socket.emit('text', {'text': Texttext});
+                    }
+                });
+                $('#Emoji').change(function() {
+                
+                    $("#Emoji").val();                          // Get the value of the currently selected item.
+                    var options=$("#Emoji option:selected");    // Get the current selection.
+                    options.val();                              // Get the value of the currently selected item.
+                    
+                    $('.enter').val($('.enter').val() + options.val());
+                    console.log(options.val());
+                })
+            });
+
+            function selectFile(){
+                // trigger click event for file selection
+                $("#file").trigger("click");
+            }
+
+            // Get the path of the file for testing
+            $("#file").change(function(){
+                $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
+                filepath = URL.createObjectURL($(this)[0].files[0]);
+                console.log(URL.createObjectURL($(this)[0].files[0]))
+            })
+
+        </script>
+    </body>
+
+</html>

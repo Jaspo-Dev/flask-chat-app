@@ -1,4 +1,3 @@
-## import pymysql
 import sqlite3
 
 ## database query function
@@ -8,12 +7,13 @@ def query(sql,params):
     
     try:
         result = cursor.execute(sql,params).fetchall()
-        return result              # return query result
+        return result                                                       # return query result
     
     except:
-        cursor.rollback()              # rollback on error
+        cursor.rollback()                                                   # rollback on error
 
     cursor.close()
+
 
 ## Database query function, without parameters
 def query_no(sql):  
@@ -22,12 +22,13 @@ def query_no(sql):
 
     try:
         result = cursor.execute(sql).fetchall()
-        return result                   # return query result
+        return result                                                       # return query result
     
     except:
-        cursor.rollback()              # rollback on error
+        cursor.rollback()                                                   # rollback on error
 
     cursor.close()
+
 
 ## database query function for INSERT, UPDATE, DELETE
 def update(sql,params):
@@ -35,10 +36,10 @@ def update(sql,params):
 
     try:
         cursor.execute(sql,params)
-        cursor.commit()             # execute sql statement
+        cursor.commit()                                                     # execute sql statement
         return "Changed successfully"
     
     except:
-        cursor.rollback()           # rollback on error
+        cursor.rollback()                                                   # rollback on error
 
     cursor.close()

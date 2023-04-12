@@ -71,98 +71,103 @@
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
                         <div class="col-lg-12">
-                                <div class="ibox chat-view">
-                                    <div class="ibox-title">
-                                        <small class="float-right text-muted">Chat Window</small>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <div class="row">
-                                            <div class="col-md-9 ">
-                                                <div class="chat-discussion">
-                                                    {% for row in message %}
-                                                    <div class="chat-message left">
-                                                        <img class="message-avatar" src={{ row[3] }} alt="">
-                                                        <div class="message">
-                                                            <a class="message-author" > {{ row[2] }} </a>
-                                                            <span class="message-date">  {{ row[1]}} </span>
-                                                            <span class="message-content">{{ row[0] }}</span>
+                            <div class="ibox chat-view">
+                                <div class="ibox-title">
+                                    <small class="float-right text-muted">Chat Window</small>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-md-9 ">
+                                            <div class="chat-discussion">
+                                                {% for row in message %}
+                                                <div class="chat-message left">
+                                                    <img class="message-avatar" src={{ row[3] }} alt="">
+                                                    <div class="message">
+                                                        <a class="message-author" > {{ row[2] }} </a>
+                                                        <span class="message-date">  {{ row[1]}} </span>
+                                                        <span class="message-content">{{ row[0] }}</span>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="chat-users">
+                                                <div class="users-list">
+                                                {% for row in users %}
+                                                    {% if session['email'] != row[3] %}
+                                                    <div class="chat-user">
+                                                        {% if row[0] in cur %}
+                                                        <span id="id_status_{{row[0]}}">
+                                                            <span class="float-right label label-primary">Online</span>
+                                                        </span>
+                                                        {% endif %}
+                                                        <img class="chat-avatar" src={{ row[1] }} />
+                                                        <div class="chat-user-name">
+                                                            <a class="userlist" id="id_{{row[0]}}">{{row[0]}}</a>
                                                         </div>
                                                     </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="chat-users">
-                                                    <div class="users-list">
-
-                                                    {% for row in users %}
-                                                        <div class="chat-user">
-                                                        {# <span class="float-right label label-primary">Online</span>#}
-                                                            <img class="chat-avatar" src={{ row[1] }} />
-                                                            <div class="chat-user-name">
-                                                                <a href="#">{{row[0]}}</a>
-                                                            </div></div>
-                                                    {% endfor %}
-                                                    </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="chat-message-form">
-                                                {#  <a class="fa fa-smile-o fa-2x" style="margin-top: 12px;margin-left: 12px"></a> #}
-                                                    <select style="margin-left: 0;outline: none;border: none" id="Emoji">
-                                                        <option selected="selected" value="0">&#128512;</option>
-                                                        <option value="&#128513;">&#128513;</option>
-                                                        <option value="&#128514;">&#128514;</option>
-                                                        <option value="&#128515;">&#128515;</option>
-                                                        <option value="&#128516;">&#128516;</option>
-                                                        <option value="&#128517;">&#128517;</option>
-                                                        <option value="&#128518;">&#128518;</option>
-                                                        <option value="&#128519;">&#128519;</option>
-                                                        <option value="&#128520;">&#128520;</option>
-                                                        <option value="&#128521;">&#128521;</option>
-                                                        <option value="&#128522;">&#128522;</option>
-                                                        <option value="&#128523;">&#128523;</option>
-                                                        <option value="&#128524;">&#128524;</option>
-                                                        <option value="&#128525;">&#128525;</option>
-                                                        <option value="&#128526;">&#128526;</option>
-                                                        <option value="&#128527;">&#128527;</option>
-                                                        <option value="&#128528;">&#128528;</option>
-                                                        <option value="&#128529;">&#128529;</option>
-                                                        <option value="&#128530;">&#128530;</option>
-                                                        <option value="&#128531;">&#128531;</option>
-                                                        <option value="&#128532;">&#128532;</option>
-                                                        <option value="&#128533;">&#128533;</option>
-                                                        <option value="&#128534;">&#128534;</option>
-                                                        <option value="&#128535;">&#128535;</option>
-                                                        <option value="&#128536;">&#128536;</option>
-                                                        <option value="&#128537;">&#128537;</option>
-                                                        <option value="&#128538;">&#128538;</option>
-                                                        <option value="&#128539;">&#128539;</option>
-                                                        <option value="&#128540;">&#128540;</option>
-                                                        <option value="&#128541;">&#128541;</option>
-                                                        <option value="&#128542;">&#128542;</option>
-                                                        <option value="&#128543;">&#128543;</option>
-                                                        <option value="&#128544;">&#128544;</option>
-                                                        <option value="&#128545;">&#128545;</option>
-                                                        <option value="&#128546;">&#128546;</option>
-                                                        <option value="&#128547;">&#128547;</option>
-                                                        <option value="&#128548;">&#128548;</option>
-                                                        <option value="&#128549;">&#128549;</option>
-                                                    </select>
-                                                    <button href="#" class="fa fa-file-picture-o" style="margin-top: 12px;margin-left: 12px; border: none;color: orange;background: none" onclick="selectFile();"></button>
-                                                    <input type="file" id="file" onchange="getFilePath()"  style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
-                                                    <div class="form-group">
-                                                        <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="Enter chat message ..." value="" >
-                                                        <br>
-                                                        <img src="" class="img" style="height: 100px; weight:100px" />
-                                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="chat-message-form">
+                                                <select style="margin-left: 0;outline: none;border: none" id="Emoji">
+                                                    <option selected="selected" value="0">&#128512;</option>
+                                                    <option value="&#128513;">&#128513;</option>
+                                                    <option value="&#128514;">&#128514;</option>
+                                                    <option value="&#128515;">&#128515;</option>
+                                                    <option value="&#128516;">&#128516;</option>
+                                                    <option value="&#128517;">&#128517;</option>
+                                                    <option value="&#128518;">&#128518;</option>
+                                                    <option value="&#128519;">&#128519;</option>
+                                                    <option value="&#128520;">&#128520;</option>
+                                                    <option value="&#128521;">&#128521;</option>
+                                                    <option value="&#128522;">&#128522;</option>
+                                                    <option value="&#128523;">&#128523;</option>
+                                                    <option value="&#128524;">&#128524;</option>
+                                                    <option value="&#128525;">&#128525;</option>
+                                                    <option value="&#128526;">&#128526;</option>
+                                                    <option value="&#128527;">&#128527;</option>
+                                                    <option value="&#128528;">&#128528;</option>
+                                                    <option value="&#128529;">&#128529;</option>
+                                                    <option value="&#128530;">&#128530;</option>
+                                                    <option value="&#128531;">&#128531;</option>
+                                                    <option value="&#128532;">&#128532;</option>
+                                                    <option value="&#128533;">&#128533;</option>
+                                                    <option value="&#128534;">&#128534;</option>
+                                                    <option value="&#128535;">&#128535;</option>
+                                                    <option value="&#128536;">&#128536;</option>
+                                                    <option value="&#128537;">&#128537;</option>
+                                                    <option value="&#128538;">&#128538;</option>
+                                                    <option value="&#128539;">&#128539;</option>
+                                                    <option value="&#128540;">&#128540;</option>
+                                                    <option value="&#128541;">&#128541;</option>
+                                                    <option value="&#128542;">&#128542;</option>
+                                                    <option value="&#128543;">&#128543;</option>
+                                                    <option value="&#128544;">&#128544;</option>
+                                                    <option value="&#128545;">&#128545;</option>
+                                                    <option value="&#128546;">&#128546;</option>
+                                                    <option value="&#128547;">&#128547;</option>
+                                                    <option value="&#128548;">&#128548;</option>
+                                                    <option value="&#128549;">&#128549;</option>
+                                                </select>
+                                                <button href="#" class="fa fa-file-picture-o" style="margin-top: 12px;margin-left: 12px; border: none;color: orange;background: none" onclick="selectFile();"></button>
+                                                <input type="file" id="file" onchange="getFilePath()"  style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
+                                                <div class="form-group">
+                                                    <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="          Enter chat message ..." value="" >
+                                                    <br>
+                                                    <img src="" class="img" style="height: 100px; weight:100px" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -180,7 +185,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/inspinia.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/pace/pace.min.js') }}"></script>
         <script src="https://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
         <script type="text/javascript" charset="utf-8">
             var  filepath;
             var log = function() {
@@ -189,7 +194,8 @@
 
             var socket;
 
-            var current_channel = ''
+            var current_channel = '';
+            var chat_user = "";
 
             var clear_board = function() {
                 $('.enter').val('');
@@ -197,12 +203,29 @@
                 }
 
                 $(document).ready(function() {
+                
+                // Append into Chat Window
+                let append_chat = function(data) {
+                    let html = "";
+
+                    html += "<div class='chat-message left'>";
+                    html += "<img class='message-avatar' src='" + data.avatar_url + "' alt=''>";
+                    html += "<div class='message'>";
+                    html += "<a class='message-author'>" + data.user_name + "</a>";
+                    html += "<span class='message-date'>" + data.create_time + "</span>";
+                    html += "<span class='message-content'>" + data.text + "</span>";
+                    html += "</div> </div>";
+
+                    return html;
+                }
 
                 // create instance
                 socket = io.connect('ws://' + document.domain + ':' + location.port + '/chatroom');
 
                 socket.on('connect', function() {
-                    log('connection succeeded');
+                    log('connection succeeded into chatroom');
+
+                    socket.emit('joined', {'text': 'joined'})
                 });
 
                 socket.on('message', function(data) {
@@ -210,7 +233,6 @@
                     text = data.text
                     create_time = data.create_time
                     var avatar_url = data.avatar_url
-                    log(Username + ':' + text)
 
                     if(filepath){
                         $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'> <img src='"+ filepath+"' class='imgchat' style='height: 100px;weight:100px'/>"+text+"</span> </div> </div>");
@@ -218,8 +240,23 @@
                     }
 
                     else{
-                        $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'>"+text+"</span> </div> </div>");
+                        let html = "";
+
+                        if("{{ session['username'] }}" == data.receiver || "{{ session['username'] }}" == Username)
+                            html = append_chat(data);
+                        
+                        $(".chat-discussion").append(html);
                     }
+                });
+
+                socket.on('status', function(data) {
+                    let html = append_chat(data);
+                    $(".chat-discussion").append(html);
+                    
+                    $('#id_status_' + data.join_user).empty();
+    
+                    if(data.flag)
+                        $('#id_status_' + data.join_user).append('<span class="float-right label label-primary">Online</span>');
                 });
 
                 $('.enter').keypress(function(e) {
@@ -232,18 +269,25 @@
                         $('.enter').val('');
                         
                         // Send chat content to the backend
-                        socket.emit('text', {'text': Texttext});
+                        if (chat_user == "")
+                            socket.emit('text', {'text': Texttext});
+                        else
+                            socket.emit('text', {'text': Texttext, 'receiver': chat_user});
                     }
                 });
                 $('#Emoji').change(function() {
                 
-                $("#Emoji").val();                          // Get the value of the currently selected item.
-                    var options=$("#Emoji option:selected");// Get the current selection.
-                    options.val();                          // Get the value of the currently selected item.
+                    $("#Emoji").val();                          // Get the value of the currently selected item.
+                    var options=$("#Emoji option:selected");    // Get the current selection.
+                    options.val();                              // Get the value of the currently selected item.
                     
                     $('.enter').val($('.enter').val() + options.val());
                     console.log(options.val());
                 })
+            });
+
+            $('.userlist').on('click', function() {
+                chat_user = $(this).attr('id').split('id_')[1];
             });
 
             function selectFile(){
