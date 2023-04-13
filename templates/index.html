@@ -108,7 +108,7 @@
                         <div class="col-lg-3">
                             <div class="contact-box center-version">
                                 <a href="history/{{ row[0] }}">
-                                    <img alt="image" class="rounded-circle" src="{{ row[1] }}" id="profile_img_{{row[3]}}">
+                                    <img alt="image" class="rounded-circle" src={{ row[1] }} id="profile_img_{{row[3]}}">
                                     <h3 class="m-b-xs"><strong>{{row[0]}}</strong></h3>
                                     <address class="m-t-md">
                                         <strong>Contact information</strong>
@@ -194,12 +194,11 @@
                 socket.emit('avatar_url', {'avatar_url': newurl});
 
                 socket.on("avatar_upload", function(data) {
+                    console.log(data);
                     $("#ft_img").attr("src", data.avatar_url);
                     $("#profile_img_" + data.user_id).attr("src", data.avatar_url);
                 });
             });
-
-            
 
         </script>
 

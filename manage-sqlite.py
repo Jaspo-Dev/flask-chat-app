@@ -26,7 +26,7 @@ def getLoginDetails():
         userName = 'please sign in'
     else:
         loggedIn = True
-        sql = "SELECT name FROM users WHERE email = %s"
+        sql = "SELECT name FROM users WHERE email = ?"
         params = [session['email']]
         userName = query.query(sql,params)
 
@@ -56,7 +56,7 @@ def get_history(user = None):
   
     else:
         sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id \
-                FROM messages, users where (users.name = %s OR messages.receiver_id = %s) AND messages.user_id = users.name"
+                FROM messages, users where (users.name = ? OR messages.receiver_id = ?) AND messages.user_id = users.name"
         
         params = [user, user]
         messages = query.query(sql, params)
@@ -83,10 +83,10 @@ def register():
         email = request.form['email']
         name = request.form['name']
         if is_valid(email, password):
-            flash('Account already exists, please sign in')
+            flash('Account already exists, please log in')
             return render_template("login.html")
         else:
-            sql = 'INSERT INTO users (email, password, name) VALUES (%s, %s, %s)'
+            sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)'
             params = [email,hashlib.md5(password.encode()).hexdigest(),name]
 
             msg = query.update(sql,params)
@@ -108,17 +108,12 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user_socket = request.environ.get('wsgi.websocket')
-        
+        user_dict[email] = user_socket
         if is_valid(email, password):
-            if email in user_dict:
-                flash('user exists')
-                return render_template('login.html')
-
-            user_dict[email] = user_socket
             session['username'] = is_valid(email, password)
             session['email'] = email
             user_list.append(session['username'])
-            
+
             flash('login successful')
             return redirect(url_for('index'))
         else:
@@ -126,7 +121,7 @@ def login():
             flash('login failed')
             return render_template('login.html', error=error)
     else:
-        # flash('login failed')
+        flash('login failed')
         return render_template('login.html')
 
 ## Logout
@@ -134,7 +129,6 @@ def login():
 def logout():
     socketio.emit('status', {'join_user': session['username'], 'flag': False})
     
-    user_dict.pop(session['email'])
     session.pop('email', None)
     session.pop('username', None)
 
@@ -147,7 +141,7 @@ def index():
         return redirect(url_for('login'))
     else:
         loggedIn, userName = getLoginDetails()
-        sql = "SELECT avatar_url FROM users WHERE email = %s"
+        sql = "SELECT avatar_url FROM users WHERE email = ?"
         params = [session['email']]
         avatar_url = query.query(sql, params)
 
@@ -170,7 +164,7 @@ def chatroom():
         sql = "SELECT name, avatar_url, id, email FROM users"
         users = query.query_no(sql)
 
-        sql = "SELECT avatar_url FROM users WHERE email = %s"
+        sql = "SELECT avatar_url FROM users WHERE email = ?"
         params = [session['email']]
 
         avatar_url = query.query(sql, params)
@@ -184,7 +178,7 @@ def profile(user):
         return redirect(url_for('login'))
     else:
         # get user
-        sql = "SELECT * FROM users WHERE name = %s"
+        sql = "SELECT * FROM users WHERE name = ?"
         params = [user]
         data = query.query(sql, params)
 
@@ -222,7 +216,7 @@ def joined(information):
     user_name = session.get('user')
 
     # Get user avatar
-    sql = "SELECT avatar_url FROM users WHERE email = %s"
+    sql = "SELECT avatar_url FROM users WHERE email = ?"
     params = [session['email']]
     avatar_url = query.query(sql, params)
 
@@ -251,7 +245,7 @@ def text(information):
     user_name = session.get('user')
 
     # Get user ID
-    sql = "SELECT id FROM users WHERE email = %s"
+    sql = "SELECT id FROM users WHERE email = ?"
     params = [session['email']]
     user_id = query.query(sql, params)
 
@@ -260,16 +254,16 @@ def text(information):
 
     if information.get('receiver') is None:
         # Insert chat information into database, update database
-        sql = 'INSERT INTO messages (message, user_id, created_at) VALUES (%s, %s, %s)'
+        sql = 'INSERT INTO messages (message, user_id, created_at) VALUES (?, ?, ?)'
         params = [base64.b64encode(text.encode('utf-8')), user_name, create_time]
     else:
-        sql = 'INSERT INTO messages (message, user_id, created_at, receiver_id) VALUES (%s, %s, %s, %s)'
+        sql = 'INSERT INTO messages (message, user_id, created_at, receiver_id) VALUES (?, ?, ?, ?)'
         params = [base64.b64encode(text.encode('utf-8')), user_name, create_time, information.get('receiver')]
 
     msg = query.update(sql, params)
 
     # Get user avatar
-    sql = "SELECT avatar_url FROM users WHERE email = %s"
+    sql = "SELECT avatar_url FROM users WHERE email = ?"
     params = [session['email']]
     avatar_url = query.query(sql, params)
     
@@ -305,7 +299,7 @@ def Iconnect():
 def avatar_url(information):
     email = session['email']
     avatar_url = information.get('avatar_url')
-    sql = "UPDATE users SET avatar_url = %s WHERE email = %s "
+    sql = "UPDATE users SET avatar_url = ? WHERE email = ? "
     params = [avatar_url,email]
     msg = query.update(sql, params)
 
@@ -313,14 +307,14 @@ def avatar_url(information):
     user_name = session.get('user')
 
     # get user id
-    sql = "SELECT id FROM users WHERE email = %s"
+    sql = "SELECT id FROM users WHERE email = ?"
     params = [session['email']]
     user_id = query.query(sql, params)  
 
     # Return the chat information to the front end
     emit('avatar_upload', {
         'avatar_url': avatar_url,
-        'user_id': user_id[0][0]
+        'user_id': user_id
     })
 
 if __name__ == '__main__':

@@ -68,28 +68,38 @@
     </head>
     
     <body background="{{ url_for('static', filename='images/login.jpg') }}">
+        
         <div class="row lyear-wrapper">
             <div class="lyear-login">
                 <div class="login-center">
-                <div class="login-header text-center">
-                    <h1 style="color:white">CHATROOM</h1>
-                </div>
-                <form action="/" method="post">
-                    <div class="form-group has-feedback feedback-left">
-                    <input type="text" placeholder="Please enter your username" class="form-control" name="email" id="username" />
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="alert alert-danger">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="login-header text-center">
+                        <h1 style="color:white">CHATROOM</h1>
                     </div>
+                    <form action="/" method="post">
+                        <div class="form-group has-feedback feedback-left">
+                        <input type="text" placeholder="Please enter your username" class="form-control" name="email" id="username" />
+                        </div>
 
-                    <div class="form-group has-feedback feedback-left">
-                    <input type="password" placeholder="Please enter password" class="form-control" id="password" name="password" />
+                        <div class="form-group has-feedback feedback-left">
+                        <input type="password" placeholder="Please enter password" class="form-control" id="password" name="password" />
 
-                    </div>
-                    <div class="form-group">
-                    <button class="btn btn-block btn-primary" type="submit" >SignIn</button>
-                    </div>
-                    <a href="/register">No account? Sign up now</a>
-                </form>
+                        </div>
+                        <div class="form-group">
+                        <button class="btn btn-block btn-primary" type="submit" >SignIn</button>
+                        </div>
+                        <a href="/register">No account? Sign up now</a>
+                    </form>
 
-                <hr>
+                    <hr>
                 </div>
             </div>
         </div>

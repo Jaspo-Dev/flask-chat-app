@@ -121,18 +121,17 @@
                 console.log.apply(console, arguments)
             }
 
-            
-            const ctx = document.getElementById('chart');
-            
             const labels = [];
             const values = [];
 
             {% for us in users %}
-                {% if us[0] != user[1] %}
+                log("{{user[3]}}");
+                {% if us[0] != user[3] %}
                 labels.push("{{ us[0] }}");
                 values.push({{ charts[us[0]] }});
                 {% endif %}
             {% endfor %}
+
             values.push(0);
 
             new Chart("myChart", {
@@ -148,7 +147,6 @@
                     legend: {display: false},
                     title: {
                         display: true,
-                        // text: "Chat Analysis"
                     }
                 }
             });
