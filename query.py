@@ -5,9 +5,9 @@ import pymysql
 def query(sql,params):  
     # open database connection
     db = pymysql.connect(
-            host = 'localhost', 
-            user = 'root', 
-            password = '', 
+            host = '34.135.27.3', 
+            user = 'chatuser', 
+            password = 'chatuser', 
             db = 'chatroom'
         )
     
@@ -29,9 +29,9 @@ def query(sql,params):
 def query_no(sql):  
     # open database connection
     db = pymysql.connect(
-            host = 'localhost', 
-            user = 'root', 
-            password = '', 
+            host = '34.135.27.3', 
+            user = 'chatuser', 
+            password = 'chatuser', 
             db = 'chatroom'
         )
     
@@ -54,9 +54,9 @@ def query_no(sql):
 def update(sql,params):
     # open database connection
     db = pymysql.connect(
-            host = 'localhost', 
-            user = 'root', 
-            password = '', 
+            host = '34.135.27.3', 
+            user = 'chatuser', 
+            password = 'chatuser',
             db = 'chatroom'
         )
     
