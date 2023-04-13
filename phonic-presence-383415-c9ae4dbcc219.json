@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "phonic-presence-383415",
+  "private_key_id": "c9ae4dbcc21986b04ec97aafd6338edff02a7900",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCn7XWmdP5R07v\nSVFN7iq1g/3kmBaZcRposLs3ThXMwlDyfZckIVvy/37ZJ9QoO4SiS0zT1cJf6xlH\nGix/zsWZ2tDX4Rpk04Xm819enUW1o2la/oxNEg2nM1HCR/C52GZVFkGNrxE+nrS4\nkA9nNt35hg2/XD88gwlwRf2fv6+KONaCJL4qxgYHVdcyHC/33zG3MiqPsXVhc+TL\nPTdterdRgEpryV3CXZ4oN7dOqgo124pRhy/hEfkgROeKZ5eSfOiBXe9IjDYq90B4\nvAmAzqhkPSHbLlEO3y/4RU2NlSVhSTSTL1DH6hDn5O7ZJn/OMRcOv6/9X+uMDoIY\nfos5fE2BAgMBAAECggEASVvGwA16cz74F0Sk80Fe8s0+IXBcMFkL8cMPxjBWEjh6\nJ3TER/eU/3pjVznmg4WvoDbOzhgH7HyiqgTJGiGXpL7wMjbkanW6Roucen7AXE8s\ncoJ44sH3yHqVCixwpbRWGiNJ8Tw4PUi36MtQKwDo2Vk4jFUadtYTdDDFgPXRFkFe\neMQegOmzYLTtcZTT4Wwtl81m0vz7ezgf7wkgpvPy36vLQF6RJoAtZNYbGzGKXwgv\n+JQDsXDnZwqm3+us8bR568Xv2kaMM5eKjD1/cUWs1owE+t811v2aQUy2vAJ6xhs/\nlqnZ07sA0kObN7Z2MUfh0D7IIPPvGU1G1rqyDhUtwwKBgQDxnp7GcmJcmqKqYaN7\nPSaUaFnqS8+mF6bQ9tWHe4s68a7hIUXf3QONAfMU9SenW/n4kWwg6Uz56j5UJhuV\ntDg+tfJDRp48x6YQCswKFzlFqIxkPt50hLziv9fDBwGR+jjPJuY5R7IUujWJi8kl\niKAtBPEXzQBU2GDBE6Kcw5PmkwKBgQDONQz2c0956jeh34gjKd4AANhhF5YHOjf+\niV5mWV2Xv22k9h3acI8Xjx54yiQ+up6bUCFQqqZb/+cVHSrvJJg0tQrfOd8w7cId\n6uncWGe1S6NwZlfNgrw0bq92PLb/98b6+h5b1fTLPskONJ18rj7HWdeLZe+CQKmk\nuh+nIdKUGwKBgB44bbl6cw0MFk5jOfRfGKU1TBG++7DVgnredKSmciqkMfBcngW6\n+ge397RmWVhYa7KIVdLj+0nC35rczVRzHxnQ3gVGHuKRQhb9krmsX/BzfWPIbUB7\nnbhqsEznYm3ksxhN0DvX2NE43RtgDX+RUB9xX8pPTLxP+AION6eN2sDbAoGACn5K\nnZP6nGKd2B/u5pMv1+IzIKW5nb6JsOs+oYi0qY81PirEFCScM3+19kGbHJIUliS6\nvUch1haspLdqQuci07POzNM+F1hSA4G7ytm41VH3DDY5C502hJiJV0P5sAbk2kq2\nFshJf7o/MvjcdsbLLQvWWyKh0IgH2fkauT+QXrcCgYEAr8uuy8f8ru1O8Q3TPPi6\n/NKtEpKe6SywmAfXAgHU0Gnwlt12PaFZu4REQCZjw1Hzvev0csEvG3UcOgMJ8rLC\ny9EQ8jjpKqgjbjB2o0bavK7NPWjMzd5brMenmfSEj5MXUVpHGZcjrQTl4aJ84hte\nzMEx5HJifqMEajaBjl2s+jg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-storage-sa@phonic-presence-383415.iam.gserviceaccount.com",
+  "client_id": "117730443952077165911",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-storage-sa%40phonic-presence-383415.iam.gserviceaccount.com"
+}

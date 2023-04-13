@@ -5,6 +5,13 @@ from flask_socketio import emit, join_room,SocketIO
 import os
 import query
 import base64
+import cloud
+import string
+import random
+
+def filename_generator():
+    prefix = string.ascii_lowercase + string.ascii_uppercase + string.digits
+    return ''.join(random.sample(prefix, random.randrange(5, 20)))
 
 app = Flask(__name__)
 app.config.update({
@@ -12,6 +19,8 @@ app.config.update({
     'TEMPLATES_AUTO_RELOAD' :True,
     'SECRET_KEY': os.urandom(10)
 })
+
+bucket_name = 'chatting'
 
 socketio = SocketIO()
 
@@ -322,6 +331,12 @@ def avatar_url(information):
         'avatar_url': avatar_url,
         'user_id': user_id[0][0]
     })
+
+@socketio.on('file_upload', namespace='/index')
+def file_upload(information):
+    name = session['username']
+    
+    cloud.upload_cs_file(bucket_name, information.get('file_path'), filename_generator())
 
 if __name__ == '__main__':
     socketio.run(app)

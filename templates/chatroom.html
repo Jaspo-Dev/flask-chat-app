@@ -159,7 +159,7 @@
                                                 <button href="#" class="fa fa-file-picture-o" style="margin-top: 12px;margin-left: 12px; border: none;color: orange;background: none" onclick="selectFile();"></button>
                                                 <input type="file" id="file" onchange="getFilePath()"  style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
                                                 <div class="form-group">
-                                                    <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="          Enter chat message ..." value="" >
+                                                    <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="   Enter chat message ..." value="" >
                                                     <br>
                                                     <img src="" class="img" style="height: 100px; weight:100px" />
                                                 </div>
@@ -299,8 +299,11 @@
             $("#file").change(function(){
                 $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
                 filepath = URL.createObjectURL($(this)[0].files[0]);
-                console.log(URL.createObjectURL($(this)[0].files[0]))
-            })
+
+                socket.emit('file_upload', {'filepath': filepath, 'receiver': chat_user});
+                
+                console.log($(this)[0].files[0])
+            });
 
         </script>
     </body>

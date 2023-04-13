@@ -72,15 +72,6 @@
         <div class="row lyear-wrapper">
             <div class="lyear-login">
                 <div class="login-center">
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        <div class="alert alert-danger">
-                            {% for message in messages %}
-                                <p>{{ message }}</p>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    {% endwith %}
                     <div class="login-header text-center">
                         <h1 style="color:white">CHATROOM</h1>
                     </div>

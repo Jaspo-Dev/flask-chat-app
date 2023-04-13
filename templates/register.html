@@ -16,15 +16,7 @@
     
 </head>
 
-<body background="{{ url_for('static', filename='images/register.png') }}">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
+<body background="{{ url_for('static', filename='images/register.jpg') }}">
     <div class="middle-box text-center loginscreen   animated fadeInDown">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
