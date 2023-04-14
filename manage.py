@@ -5,7 +5,7 @@ from flask_socketio import emit, join_room,SocketIO
 import os
 import query
 import base64
-import cloud
+# import cloud
 import string
 import random
 
@@ -20,7 +20,8 @@ app.config.update({
     'SECRET_KEY': os.urandom(10)
 })
 
-bucket_name = 'chatting'
+# bucket_name = 'chatting'
+room_name = 'chat room'
 
 socketio = SocketIO()
 
@@ -58,13 +59,13 @@ def get_history(user = None):
     mess = []
 
     if user is None:
-        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id \
+        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id, messages.type \
                     FROM messages, users where messages.user_id = users.name"
     
         messages = query.query_no(sql)
   
     else:
-        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id \
+        sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id, messages.type \
                 FROM messages, users where (users.name = %s OR messages.receiver_id = %s) AND messages.user_id = users.name"
         
         params = [user, user]
@@ -72,16 +73,43 @@ def get_history(user = None):
 
     if messages is not None:
         for message in messages:
-            mess.append((
-                base64.b64decode(message[0]).decode('utf-8'),
-                message[1],
-                message[2],
-                message[3],
-                message[4],
-                message[5]
-            ))
+            if message[6] == "image" or message[6] == "video":
+                mess.append((
+                    message[0],
+                    message[1],
+                    message[2],
+                    message[3],
+                    message[4],
+                    message[5],
+                    message[6]
+                ))
+            else:
+                mess.append((
+                    base64.b64decode(message[0]).decode('utf-8'),
+                    message[1],
+                    message[2],
+                    message[3],
+                    message[4],
+                    message[5],
+                    message[6]
+                ))
 
     return mess
+
+# Get time now
+def get_now():
+    now = datetime.datetime.now()
+    now = datetime.datetime.strftime(now, '%Y-%m-%d %H:%M:%S')
+
+    return now
+
+# Get user avatar by email
+def get_avatar(email):
+    sql = "SELECT avatar_url FROM users WHERE email = %s"
+    params = [email]
+    avatar_url = query.query(sql, params)
+
+    return avatar_url
 
 ## Register
 @app.route("/register", methods = ['GET', 'POST'])
@@ -156,9 +184,8 @@ def index():
         return redirect(url_for('login'))
     else:
         loggedIn, userName = getLoginDetails()
-        sql = "SELECT avatar_url FROM users WHERE email = %s"
-        params = [session['email']]
-        avatar_url = query.query(sql, params)
+
+        avatar_url = get_avatar(session['email'])
 
         #get username
         sql = "SELECT name, avatar_url, email, id FROM users" 
@@ -179,10 +206,7 @@ def chatroom():
         sql = "SELECT name, avatar_url, id, email FROM users"
         users = query.query_no(sql)
 
-        sql = "SELECT avatar_url FROM users WHERE email = %s"
-        params = [session['email']]
-
-        avatar_url = query.query(sql, params)
+        avatar_url = get_avatar(session['email'])
 
         return render_template("chatroom.html", userName = userName, message = mess, users = users, avatar_url = avatar_url, cur = user_list)
 
@@ -230,13 +254,9 @@ def joined(information):
     room_name = 'chat room'
     user_name = session.get('user')
 
-    # Get user avatar
-    sql = "SELECT avatar_url FROM users WHERE email = %s"
-    params = [session['email']]
-    avatar_url = query.query(sql, params)
+    avatar_url = get_avatar(session['email'])
 
-    create_time = datetime.datetime.now()
-    create_time = datetime.datetime.strftime(create_time, '%Y-%m-%d %H:%M:%S')
+    create_time = get_now()
 
     join_room(room_name)
 
@@ -259,13 +279,7 @@ def text(information):
     # get username
     user_name = session.get('user')
 
-    # Get user ID
-    sql = "SELECT id FROM users WHERE email = %s"
-    params = [session['email']]
-    user_id = query.query(sql, params)
-
-    create_time = datetime.datetime.now()
-    create_time = datetime.datetime.strftime(create_time, '%Y-%m-%d %H:%M:%S')
+    create_time = get_now()
 
     if information.get('receiver') is None:
         # Insert chat information into database, update database
@@ -278,9 +292,7 @@ def text(information):
     msg = query.update(sql, params)
 
     # Get user avatar
-    sql = "SELECT avatar_url FROM users WHERE email = %s"
-    params = [session['email']]
-    avatar_url = query.query(sql, params)
+    avatar_url = get_avatar(session['email'])
     
     if information.get('receiver') is not None:
         data = {
@@ -318,9 +330,6 @@ def avatar_url(information):
     params = [avatar_url,email]
     msg = query.update(sql, params)
 
-    # get username
-    user_name = session.get('user')
-
     # get user id
     sql = "SELECT id FROM users WHERE email = %s"
     params = [session['email']]
@@ -332,11 +341,45 @@ def avatar_url(information):
         'user_id': user_id[0][0]
     })
 
-@socketio.on('file_upload', namespace='/index')
+@socketio.on('file_upload', namespace='/chatroom')
 def file_upload(information):
-    name = session['username']
+    user_name = session['username']
+    file = information.get('file')
+    file_type = information.get('type')
+
+    create_time = get_now()
+
+    if information.get('receiver') is None:
+        # Insert chat information into database, update database
+        sql = 'INSERT INTO messages (message, user_id, created_at, type) VALUES (%s, %s, %s, %s)'
+        params = [file, user_name, create_time, file_type]
+    else:
+        sql = 'INSERT INTO messages (message, user_id, created_at, receiver_id, type) VALUES (%s, %s, %s, %s, %s)'
+        params = [file, user_name, create_time, information.get('receiver'), file_type]
+
+    msg = query.update(sql, params)
+
+    if information.get('receiver') is not None:
+        data = {
+            'user_name': user_name,
+            'text': file,
+            'create_time': create_time,
+            'avatar_url': get_avatar(session['email']),
+            'receiver': information.get('receiver'),
+            'file_type': file_type
+        }
+    else:
+        data = {
+            'user_name': user_name,
+            'text': file,
+            'create_time': create_time,
+            'avatar_url': get_avatar(session['email']),
+            'file_type': file_type
+        }
+
+    # Return the chat information to the front end
     
-    cloud.upload_cs_file(bucket_name, information.get('file_path'), filename_generator())
+    emit('file_upload', data, room=room_name)
 
 if __name__ == '__main__':
     socketio.run(app)

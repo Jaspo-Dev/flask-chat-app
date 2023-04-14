@@ -11,6 +11,13 @@
         <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
+        <style>
+            video {
+                width: 320px!important; 
+                height: 240px!important;
+            }
+        </style>
+
     </head>
     <body>
         <div id="wrapper">
@@ -58,7 +65,7 @@
                                 </a>
                             </li>
                         </ul>
-
+                        
                     </nav>
                 </div>
                 <div class="row wrapper border-bottom white-bg page-heading">
@@ -85,7 +92,17 @@
                                                     <div class="message">
                                                         <a class="message-author" > {{ row[2] }} </a>
                                                         <span class="message-date">  {{ row[1]}} </span>
-                                                        <span class="message-content">{{ row[0] }}</span>
+                                                        <span class="message-content">
+                                                            {% if row[6] == "image" %}
+                                                                <img src={{ row[0] }} style="height: 80px; width: 80px;" alt="image">
+                                                            {% elif row[6] == "video" %}
+                                                                <video controls>
+                                                                    <source src="{{ row[0] }}">
+                                                                </video>
+                                                            {% else %}
+                                                                {{ row[0] }}
+                                                            {% endif %}
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 {% endfor %}
@@ -157,11 +174,11 @@
                                                     <option value="&#128549;">&#128549;</option>
                                                 </select>
                                                 <button href="#" class="fa fa-file-picture-o" style="margin-top: 12px;margin-left: 12px; border: none;color: orange;background: none" onclick="selectFile();"></button>
-                                                <input type="file" id="file" onchange="getFilePath()"  style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
+                                                <input type="file" id="file" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/>
                                                 <div class="form-group">
                                                     <input type="text" class="enter" id="enter" style="margin-top: 10px;height: 150px;width: 75%; border:black;padding-top:0px;outline:none" placeholder="   Enter chat message ..." value="" >
                                                     <br>
-                                                    <img src="" class="img" style="height: 100px; weight:100px" />
+                                                    <!-- <img src="" class="img" style="height: 100px; weight:100px" /> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -192,10 +209,58 @@
                 console.log.apply(console, arguments)
             }
 
+            var getBase64 = file => {
+                var reader = new FileReader();
+                
+
+                reader.onload = function () {
+                    // return reader.result;
+                    console.log(reader.result);
+                };
+                reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                };
+
+                reader.readAsDataURL(file);
+            };
+
             var socket;
 
             var current_channel = '';
             var chat_user = "";
+
+            // Append into Chat Window
+            let append_chat = function(data, type = 'message') {
+                let html = "";
+
+                html += "<div class='chat-message left'>";
+                html += "<img class='message-avatar' src='" + data.avatar_url + "' alt=''>";
+                html += "<div class='message'>";
+                html += "<a class='message-author'>" + data.user_name + "</a>";
+                html += "<span class='message-date'>" + data.create_time + "</span>";
+                html += "<span class='message-content'>";
+                
+                switch(type) {
+                    case 'image':
+                        html += "<img src='" + data.text + "' style='height: 80px; weight:80px'>";
+                        break;
+
+                    case 'video':
+                        html += "<video controls>";
+                        html += "<source src='" + data.text + "'";
+                        html += "</video>";
+                        break;
+
+                    default:
+                        html += data.text;
+                        break;
+                }
+                
+                html += "</span>";
+                html += "</div> </div>";
+
+                return html;
+            };
 
             var clear_board = function() {
                 $('.enter').val('');
@@ -204,20 +269,6 @@
 
                 $(document).ready(function() {
                 
-                // Append into Chat Window
-                let append_chat = function(data) {
-                    let html = "";
-
-                    html += "<div class='chat-message left'>";
-                    html += "<img class='message-avatar' src='" + data.avatar_url + "' alt=''>";
-                    html += "<div class='message'>";
-                    html += "<a class='message-author'>" + data.user_name + "</a>";
-                    html += "<span class='message-date'>" + data.create_time + "</span>";
-                    html += "<span class='message-content'>" + data.text + "</span>";
-                    html += "</div> </div>";
-
-                    return html;
-                }
 
                 // create instance
                 socket = io.connect('ws://' + document.domain + ':' + location.port + '/chatroom');
@@ -283,7 +334,15 @@
                     
                     $('.enter').val($('.enter').val() + options.val());
                     console.log(options.val());
-                })
+                });
+                socket.on('file_upload', function(data) {
+                    let html = "";
+
+                    if("{{ session['username'] }}" == data.receiver || "{{ session['username'] }}" == data.user_name)
+                        html = append_chat(data, data.file_type);
+                    
+                    $(".chat-discussion").append(html);
+                });
             });
 
             $('.userlist').on('click', function() {
@@ -298,11 +357,23 @@
             // Get the path of the file for testing
             $("#file").change(function(){
                 $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
-                filepath = URL.createObjectURL($(this)[0].files[0]);
 
-                socket.emit('file_upload', {'filepath': filepath, 'receiver': chat_user});
-                
-                console.log($(this)[0].files[0])
+                var file = URL.createObjectURL($(this)[0].files[0]);
+                var file_type = $(this)[0].files[0].type.split('/')[0];
+
+                const reader = new FileReader();
+
+                var base64data = "";
+
+                reader.readAsDataURL($(this)[0].files[0]);
+
+                reader.onload = function() {
+                    base64data = reader.result;
+
+                    console.log(file_type)
+                    console.log(reader)
+                    socket.emit('file_upload', {'file': base64data, 'receiver': chat_user, 'type': file_type});
+                }
             });
 
         </script>
