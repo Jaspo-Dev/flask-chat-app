@@ -5,7 +5,6 @@ from flask_socketio import emit, join_room,SocketIO
 import os
 import query
 import base64
-# import cloud
 import string
 import random
 
@@ -20,7 +19,6 @@ app.config.update({
     'SECRET_KEY': os.urandom(10)
 })
 
-# bucket_name = 'chatting'
 room_name = 'chat room'
 
 socketio = SocketIO()
@@ -60,13 +58,13 @@ def get_history(user = None):
 
     if user is None:
         sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id, messages.type \
-                    FROM messages, users where messages.user_id = users.name"
+                    FROM messages, users where messages.user_id = users.name ORDER BY messages.id DESC"
     
         messages = query.query_no(sql)
   
     else:
         sql = "SELECT messages.message, messages.created_at, users.name, users.avatar_url, messages.user_id, messages.receiver_id, messages.type \
-                FROM messages, users where (users.name = %s OR messages.receiver_id = %s) AND messages.user_id = users.name"
+                FROM messages, users where (users.name = %s OR messages.receiver_id = %s) AND messages.user_id = users.name ORDER BY messages.id DESC"
         
         params = [user, user]
         messages = query.query(sql, params)

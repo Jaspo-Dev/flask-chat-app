@@ -4,19 +4,12 @@ import pymysql
 ## database query function
 def query(sql,params):  
     # open database connection
-    # db = pymysql.connect(
-    #         host = '34.135.27.3', 
-    #         user = 'chatuser', 
-    #         password = 'chatuser', 
-    #         db = 'chatroom'
-    #     )
-
     db = pymysql.connect(
-        host="localhost",
-        user="root",
-        password="",
-        db="chatroom"
-    )
+            host = 'localhost', 
+            user = 'root', 
+            password = '', 
+            db = 'chatroom'
+        )
     
     cursor = db.cursor()
    
@@ -35,19 +28,12 @@ def query(sql,params):
 ## Database query function, without parameters
 def query_no(sql):  
     # open database connection
-    # db = pymysql.connect(
-    #         host = '34.135.27.3', 
-    #         user = 'chatuser', 
-    #         password = 'chatuser', 
-    #         db = 'chatroom'
-    #     )
-
     db = pymysql.connect(
-        host="localhost",
-        user="root",
-        password="",
-        db="chatroom"
-    )
+            host = 'localhost', 
+            user = 'root', 
+            password = '', 
+            db = 'chatroom'
+        )
     
     cursor = db.cursor()
 
@@ -67,19 +53,12 @@ def query_no(sql):
 ## database query function for INSERT, UPDATE, DELETE
 def update(sql,params):
     # open database connection
-    # db = pymysql.connect(
-    #         host = '34.135.27.3', 
-    #         user = 'chatuser', 
-    #         password = 'chatuser', 
-    #         db = 'chatroom'
-    #     )
-
     db = pymysql.connect(
-        host="localhost",
-        user="root",
-        password="",
-        db="chatroom"
-    )
+            host = 'localhost', 
+            user = 'root', 
+            password = '', 
+            db = 'chatroom'
+        )
     
     cursor = db.cursor()
 

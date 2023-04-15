@@ -70,7 +70,7 @@
                 </div>
                 <div class="row wrapper border-bottom white-bg page-heading">
                     <div class="col-lg-10">
-                        <h2>CHAT WINDOW</h2>
+                        <h2 id="chat_title">CHAT WINDOW</h2>
                     </div>
                     <div class="col-lg-2">
                     </div>
@@ -259,6 +259,7 @@
                 html += "</span>";
                 html += "</div> </div>";
 
+
                 return html;
             };
 
@@ -286,7 +287,7 @@
                     var avatar_url = data.avatar_url
 
                     if(filepath){
-                        $(".chat-discussion").append("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'> <img src='"+ filepath+"' class='imgchat' style='height: 100px;weight:100px'/>"+text+"</span> </div> </div>");
+                        $(".chat-discussion").prepend("<div class='chat-message left'> <img class='message-avatar' src="+ avatar_url +" alt='' > <div class='message'><a class='message-author' > "+Username+"</a> <span class='message-date'>"+create_time+" </span><span class='message-content'> <img src='"+ filepath+"' class='imgchat' style='height: 100px;weight:100px'/>"+text+"</span> </div> </div>");
                         $(".img").attr("src",'');
                     }
 
@@ -296,13 +297,14 @@
                         if("{{ session['username'] }}" == data.receiver || "{{ session['username'] }}" == Username)
                             html = append_chat(data);
                         
-                        $(".chat-discussion").append(html);
+                        $(".chat-discussion").prepend(html);
+                        window.scrollBy(0, 500);
                     }
                 });
 
                 socket.on('status', function(data) {
                     let html = append_chat(data);
-                    $(".chat-discussion").append(html);
+                    $(".chat-discussion").prepend(html);
                     
                     $('#id_status_' + data.join_user).empty();
     
@@ -341,12 +343,15 @@
                     if("{{ session['username'] }}" == data.receiver || "{{ session['username'] }}" == data.user_name)
                         html = append_chat(data, data.file_type);
                     
-                    $(".chat-discussion").append(html);
+                    $(".chat-discussion").prepend(html);
                 });
             });
 
             $('.userlist').on('click', function() {
                 chat_user = $(this).attr('id').split('id_')[1];
+
+                $('#chat_title').empty();
+                $('#chat_title').append(chat_user);
             });
 
             function selectFile(){
